@@ -10,7 +10,7 @@ dotenv.config();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://your-actual-netlify-app-url.netlify.app",
+  "https://dancing-parfait-073d35.netlify.app",
 ];
 
 app.use(
