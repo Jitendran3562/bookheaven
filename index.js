@@ -8,11 +8,25 @@ import userRoute from "./route/user.route.js";
 const app = express();
 dotenv.config();
 
-const corsOptions = {
-  origin: "https://majestic-moxie-73cf6d.netlify.app",
-  optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://your-actual-netlify-app-url.netlify.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // If you are using cookies or sessions
+  })
+);
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 4000;
@@ -20,8 +34,8 @@ const URI = process.env.MongoDBURI;
 // connect to mongodb
 try {
   mongoose.connect(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
   });
   console.log("connect to mongodb");
 } catch (error) {
